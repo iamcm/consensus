@@ -1,6 +1,7 @@
 *.pyc
 settings.py
 settings.pyc
+site.log
 
 # Packages
 *.egg
