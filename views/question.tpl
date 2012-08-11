@@ -37,4 +37,4 @@
 %end
 
 
-%rebase base js=js
+%rebase base js=js, vd=vd
