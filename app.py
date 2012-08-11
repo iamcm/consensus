@@ -22,11 +22,11 @@ import settings
 
 #######################################################
 if settings.PROVIDE_STATIC_FILES:
-    @route('/static/<filepath:path>')
+    @route(settings.ROUTE_PREFIX +'/static/<filepath:path>')
     def server_static(filepath):
         return bottle.static_file(filepath, root=_ROOTPATH +'/static/')
         
-    @route('/userfiles/<filepath:path>')
+    @route(settings.ROUTE_PREFIX +'/userfiles/<filepath:path>')
     def server_static(filepath):
         return bottle.static_file(filepath, root=_ROOTPATH +'/userfiles/') 
 #######################################################
@@ -46,12 +46,12 @@ def checklogin(callback):
     
 
 
-@route('/login', method='GET')
+@route(settings.ROUTE_PREFIX +'/login', method='GET')
 def index():
     return bottle.template('login')
     
     
-@route('/login', method='POST')
+@route(settings.ROUTE_PREFIX +'/login', method='POST')
 def index():
     e = bottle.request.POST.get('email')
     p = bottle.request.POST.get('password')
@@ -75,7 +75,7 @@ def index():
         return bottle.template('login', error='Please complete the form', email=e or '', password=p or '')
 
 
-@route('/logout', method='GET')
+@route(settings.ROUTE_PREFIX +'/logout', method='GET')
 @checklogin
 def index():
     s = bottle.request.session
@@ -84,12 +84,12 @@ def index():
     return bottle.redirect('/login')
     
     
-@route('/register', method='GET')
+@route(settings.ROUTE_PREFIX +'/register', method='GET')
 def index():
     return bottle.template('register')
     
     
-@route('/register', method='POST')
+@route(settings.ROUTE_PREFIX +'/register', method='POST')
 def index():
     e = bottle.request.POST.get('email')
     p1 = bottle.request.POST.get('password1')
@@ -113,12 +113,12 @@ def index():
         return bottle.template('register', error='Please complete the form', email=e or '', password1=p1 or '', password2=p2 or '')
     
     
-@route('/success', method='GET')
+@route(settings.ROUTE_PREFIX +'/success', method='GET')
 def index():
     return bottle.template('register-success')
 
 
-@route('/activate/<token>')
+@route(settings.ROUTE_PREFIX +'/activate/<token>')
 def index(token):
     u = User(_DBCON)
     if u.activate(token):
@@ -138,11 +138,11 @@ def index(token):
     
     
     
-@route('/fb/login')
+@route(settings.ROUTE_PREFIX +'/fb/login')
 def index():
     return bottle.redirect(FacebookClient().get_authentication_url())
     
-@route('/fb/process')
+@route(settings.ROUTE_PREFIX +'/fb/process')
 def index():
     user = FacebookClient().process(bottle.request.GET['code'])
     
@@ -225,15 +225,15 @@ class Controller:
             return self.question()
 
 
-@route('/', method='GET')
+@route(settings.ROUTE_PREFIX +'/', method='GET')
 def index():
     return Controller().index()
     
-@route('/question', method='GET')
+@route(settings.ROUTE_PREFIX +'/question', method='GET')
 def index():
     return Controller().question()
     
-@route('/question', method='POST')
+@route(settings.ROUTE_PREFIX +'/question', method='POST')
 def index():
     return Controller().question_save()
     
