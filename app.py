@@ -21,7 +21,7 @@ import settings
 
 
 #######################################################
-if settings.ENVIRONMENT=='dev':
+if settings.PROVIDE_STATIC_FILES:
     @route('/static/<filepath:path>')
     def server_static(filepath):
         return bottle.static_file(filepath, root=_ROOTPATH +'/static/')
