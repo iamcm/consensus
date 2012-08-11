@@ -10,7 +10,7 @@
     </div>
     %end
 
-    <form class="form-horizontal" id="loginForm" method='POST' action="/login" >
+    <form class="form-horizontal" id="loginForm" method='POST' action="{{vd['baseurl']}}/login" >
         
         <div class="control-group">
             <div class="controls">
@@ -27,7 +27,7 @@
         <div class="control-group">
             <div class="controls">
                 <button type="submit" class="btn">Login</button>
-                or <a href="/register">register an account</a>
+                or <a href="{{vd['baseurl']}}/register">register an account</a>
             </div>
         </div>
         
@@ -35,7 +35,7 @@
     
     <div class="fblogin">
         <p>Or:</p>
-        <a href="/fb/login" class="btn"><img src="/static/img/f_logo.png" /> Login in with Facebook</a>
+        <a href="{{vd['baseurl']}}/fb/login" class="btn"><img src="/static/img/f_logo.png" /> Login in with Facebook</a>
     </div>
 </div>
 

@@ -2,6 +2,7 @@
 from Crypto.Hash import SHA, MD5
 import os
 import datetime
+import settings
 from models.Logger import Logger
 from models.BaseModel import BaseModel
 
@@ -11,11 +12,11 @@ class User(BaseModel):
         """
         Class to represent a user.
         
-        There are two salts to every password, one is stored in this
-        class and never changes, the other comes from a generated random
+        There are two salts to every password, one is stored in settings.py 
+        and never changes, the other comes from a generated random
         sequence and is stored in the database along with the password hash
         """
-        self._salt = 'F&*(Afau908'
+        self._salt = settings.SALT
         self.fields = [
             ('email', email),
             ('password', password),

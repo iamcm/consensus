@@ -190,6 +190,7 @@ class Controller:
     def __init__(self):
         self.viewdata = {
             'date':datetime.datetime.now().strftime('%Y'),
+            'baseurl':settings.BASEURL,
         }
 
     def _template(self, template):
@@ -218,7 +219,7 @@ class Controller:
             c.text = t
             c.save()
         
-            return bottle.redirect('/')
+            return bottle.redirect(settings.BASEURL +'/')
         else:
             self.viewdata.update({'error':'Please complete the form'})
             return self.question()

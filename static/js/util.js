@@ -1,4 +1,4 @@
-Util = {}
+var Util = {}
 
 Util.Html = {
     /**
@@ -33,26 +33,25 @@ Util.Html = {
         
         return '<span'+ id + classname + style + title +'>'+ obj.content +'</span>';
     }    
-}
+};
 
 Util.String = {
     trim:function(string, maxlength, addTitle){       
-        if(string.length > length){
-            var output = string.slice(0, maxlength) + '...';
+        var output = string;
+        if(string.length > maxlength){
+            output = string.slice(0, maxlength) + '...';
             
             if(addTitle){
                 output = Util.Html.span({
                     'content':output,
                     'title':string
-                })
+                });
             }
-        } else {
-            var output = string;
-        }   
+        }
         
         return output;
     }
-}
+};
 
 Util.Templating = {
     renderTemplate:function(templateid, context, targetid, fadeInEl){
@@ -63,4 +62,4 @@ Util.Templating = {
         $('#'+ targetid).html(template(context));
         $(fadeInEl).fadeIn(50);
     }
-}
+};
