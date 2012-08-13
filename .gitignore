@@ -2,6 +2,7 @@
 settings.py
 settings.pyc
 site.log
+app.pid
 
 # Packages
 *.egg
