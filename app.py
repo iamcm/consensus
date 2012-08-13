@@ -199,7 +199,7 @@ class Controller:
     
     def index(self):
         self.viewdata.update({
-            'cons': EntityManager(_DBCON).getAll(Question, sortBy=[('added',1)]),    
+            'questions': EntityManager(_DBCON).getAll(Question, sortBy=[('added',1)]),    
         })
         return self._template('index')
         
@@ -215,14 +215,22 @@ class Controller:
         t = bottle.request.POST.get('text')
         
         if t and len(t.strip())>0:
-            c = Question(_DBCON, _id)
-            c.text = t
-            c.save()
+            q = Question(_DBCON, _id)
+            q.text = t
+            q.save()
         
             return bottle.redirect(settings.BASEURL +'/')
         else:
             self.viewdata.update({'error':'Please complete the form'})
             return self.question()
+        
+    def question_delete(self):
+        _id = bottle.request.GET.get('_id')
+        
+        if _id:
+            EntityManager(_DBCON).deleteOne('Question', _id)
+        
+        return bottle.redirect(settings.BASEURL +'/')
 
 
 @route('/', method='GET')
@@ -236,6 +244,10 @@ def index():
 @route('/question', method='POST')
 def index():
     return Controller().question_save()
+    
+@route('/question/delete', method='GET')
+def index():
+    return Controller().question_delete()
     
     
 #######################################################

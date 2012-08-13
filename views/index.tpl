@@ -1,10 +1,12 @@
 
 <div class="container">
-    %for c in vd['cons']:
+    %for q in vd['questions']:
     <div class="row">
-        <a href="{{vd['baseurl']}}/question?_id={{c._id}}">{{c.text}}</a>
+        <a href="{{vd['baseurl']}}/question?_id={{q._id}}">{{q.text}}</a>
         <span class="right">
-            <a href="{{vd['baseurl']}}/question?_id={{c._id}}">edit</a>
+            <a href="{{vd['baseurl']}}/question?_id={{q._id}}">edit</a>
+            |
+            <a href="{{vd['baseurl']}}/question/delete?_id={{q._id}}">delete</a>
         </span>
     </div>
     %end
