@@ -54,6 +54,7 @@
         
         <script src="{{vd['baseurl']}}/static/js/jquery.js"></script>
         <script src="{{vd['baseurl']}}/static/js/bootstrap.js"></script>
+        <script src="{{vd['baseurl']}}/static/js/handlebars.js"></script>
         <script src="{{vd['baseurl']}}/static/js/site.js"></script>
         %if defined('js'):
             %js()

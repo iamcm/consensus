@@ -1,13 +1,10 @@
 import datetime
 from models.BaseModel import BaseModel
 
-class Question(BaseModel):    
+class Response(BaseModel):    
     def __init__(self, DBCON, _id=None):
         self.fields = [
-            ('text', None),
-            ('options', []),
-            ('responses', []),            
-            ('complete', False),
+            ('option', None),
             ('added', datetime.datetime.now()),
             ('userId', None),
         ]

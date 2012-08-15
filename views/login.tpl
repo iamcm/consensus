@@ -59,4 +59,4 @@
 </style>
 %end
 
-%rebase base_public css=css, js=js
+%rebase base_public css=css, js=js, vd=vd

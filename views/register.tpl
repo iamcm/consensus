@@ -43,4 +43,4 @@
     </form>
 </div>
 
-%rebase base_public
+%rebase base_public vd=vd

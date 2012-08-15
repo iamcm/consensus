@@ -22,6 +22,17 @@
         </div>
         
         <div class="control-group">
+            <label class="control-label" for="text">
+                Options
+                <br />
+                <a href="#" id='addOption'>Add option</a>
+            </label>
+            <div class="controls options">
+                <p><input type="text" class="input-xlarge" name="option"></p>
+            </div>
+        </div>
+
+        <div class="control-group">
             <div class="controls">
                 <button type="submit" class="btn">Save</button>
             </div>
@@ -31,8 +42,22 @@
 </div>
 
 %def js():
+<script id="tplOption" type="text/x-handlebars-template">
+    <p>
+        <input type="text" class="input-xlarge" name="option">
+    </p>
+</script>
+
 <script>
     $('#text').focus();
+
+    $('#addOption').click(add_option);
+
+    var new_option = Handlebars.compile($("#tplOption").html());
+
+    function add_option () {
+        $('.options').append(new_option);
+    }
 </script>
 %end
 

@@ -17,6 +17,8 @@ from models.Logger import Logger
 from models.EntityManager import EntityManager
 from models.Util import Util
 from models.Question import Question
+from models.Option import Option
+from models.Response import Response
 import settings
 
 
@@ -30,7 +32,7 @@ if settings.PROVIDE_STATIC_FILES:
     def server_static(filepath):
         return bottle.static_file(filepath, root=_ROOTPATH +'/userfiles/') 
 #######################################################
-"""
+
 def checklogin(callback):
     def wrapper(*args, **kwargs):
         if bottle.request.get_cookie('token'):
@@ -48,11 +50,20 @@ def checklogin(callback):
 
 @route('/login', method='GET')
 def index():
-    return bottle.template('login')
+    vd = {
+        #'date':datetime.datetime.now().strftime('%Y'),
+        'baseurl':settings.BASEURL,
+    }
+    return bottle.template('login', vd=vd)
     
     
 @route('/login', method='POST')
 def index():
+    vd = {
+        #'date':datetime.datetime.now().strftime('%Y'),
+        'baseurl':settings.BASEURL,
+    }
+
     e = bottle.request.POST.get('email')
     p = bottle.request.POST.get('password')
         
@@ -70,9 +81,9 @@ def index():
             
             bottle.redirect('/')
         else:
-            return bottle.template('login', error='Incorrect email/password combination', email=e, password=p)
+            return bottle.template('login', error='Incorrect email/password combination', email=e, password=p, vd=vd)
     else:
-        return bottle.template('login', error='Please complete the form', email=e or '', password=p or '')
+        return bottle.template('login', error='Please complete the form', email=e or '', password=p or '', vd=vd)
 
 
 @route('/logout', method='GET')
@@ -86,7 +97,11 @@ def index():
     
 @route('/register', method='GET')
 def index():
-    return bottle.template('register')
+    vd = {
+        #'date':datetime.datetime.now().strftime('%Y'),
+        'baseurl':settings.BASEURL,
+    }
+    return bottle.template('register', vd=vd)
     
     
 @route('/register', method='POST')
@@ -110,12 +125,20 @@ def index():
                 
                 
     else:
-        return bottle.template('register', error='Please complete the form', email=e or '', password1=p1 or '', password2=p2 or '')
+        vd = {
+            #'date':datetime.datetime.now().strftime('%Y'),
+            'baseurl':settings.BASEURL,
+        }
+        return bottle.template('register', error='Please complete the form', email=e or '', password1=p1 or '', password2=p2 or '', vd=vd)
     
     
 @route('/success', method='GET')
 def index():
-    return bottle.template('register-success')
+    vd = {
+        #'date':datetime.datetime.now().strftime('%Y'),
+        'baseurl':settings.BASEURL,
+    }
+    return bottle.template('register-success', vd=vd)
 
 
 @route('/activate/<token>')
@@ -129,7 +152,11 @@ def index(token):
         bottle.response.set_cookie('token', str(s.publicid), path='/')
         bottle.redirect('/')
     else:
-        return bottle.template('error', error='The token does not match any account that is pending activation')
+        vd = {
+            #'date':datetime.datetime.now().strftime('%Y'),
+            'baseurl':settings.BASEURL,
+        }
+        return bottle.template('error', error='The token does not match any account that is pending activation', vd=vd)
     
     
     
@@ -174,7 +201,7 @@ def index():
     else:
         bottle.redirect('/login')   
     
-"""
+
     
 ########################################################################
 
@@ -213,10 +240,18 @@ class Controller:
     def question_save(self):
         _id = bottle.request.POST.get('_id')
         t = bottle.request.POST.get('text')
-        
+        options = []
+
+        for option in bottle.request.POST.getall('option'):
+            o = Option(_DBCON)
+            o.text = option
+            o.save()
+            options.append(o)
+
         if t and len(t.strip())>0:
             q = Question(_DBCON, _id)
             q.text = t
+            q.options = options
             q.save()
         
             return bottle.redirect(settings.BASEURL +'/')
@@ -231,23 +266,59 @@ class Controller:
             EntityManager(_DBCON).deleteOne('Question', _id)
         
         return bottle.redirect(settings.BASEURL +'/')
+        
+    def question_view(self):
+        q = Question(_DBCON, _id=bottle.request.GET.get('_id'))
+        
+        self.viewdata.update({'q':q})
+
+        return self._template('question_view')
+        
+    def question_respond(self):
+        _id = bottle.request.POST.get('_id')
+        option_id = bottle.request.POST.get('option')
+
+        if _id and option_id:
+            q = Question(_DBCON, _id=_id)
+            r = Response(_DBCON)
+            r.option = option_id
+            r.userId = bottle.request.session.userid
+            
+            q.responses.append(r)
+            q.save()
+        
+        return bottle.redirect(settings.BASEURL +'/')
 
 
 @route('/', method='GET')
+@checklogin
 def index():
     return Controller().index()
     
 @route('/question', method='GET')
+@checklogin
 def index():
     return Controller().question()
     
 @route('/question', method='POST')
+@checklogin
 def index():
     return Controller().question_save()
     
 @route('/question/delete', method='GET')
+@checklogin
 def index():
-    return Controller().question_delete()
+    return Controller().question_delete() 
+    
+@route('/question/view', method='GET')
+@checklogin
+def index():
+    return Controller().question_view()  
+    
+@route('/question/respond', method='POST')
+@checklogin
+def index():
+    return Controller().question_respond() 
     
     
 #######################################################

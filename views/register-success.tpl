@@ -3,4 +3,4 @@
     Account created successfully, we have sent you an email with a link that can use to activate your account.
 </div>
 
-%rebase base_public
+%rebase base_public vd=vd

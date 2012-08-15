@@ -78,15 +78,18 @@ class BaseModel(object):
                 fieldvalue = entity.get(f)
                 
                 if fieldtype == list:
+                    Logger().log_to_file("1")
                     fieldlist = []
                     for el in fieldvalue:
+                        Logger().log_to_file("2")
                         if type(el)==dict and el.has_key('__instanceOf__'):
                             el = eval('%s(self.db, ObjectId("%s"))' %
                                       (self._unicode_to_class(el['__instanceOf__']), el['_id']))
                         
                         fieldlist.append(el)
                     fieldvalue = fieldlist
-                elif type(fieldvalue)==dict and fieldvalue.has_key('__instanceOf__'):         
+                elif type(fieldvalue)==dict and fieldvalue.has_key('__instanceOf__'):     
+                    Logger().log_to_file("3")    
                     fieldvalue = eval('%s(self.db, ObjectId("%s"))' %
                                       (self._unicode_to_class(fieldvalue['__instanceOf__'])
                                       , fieldvalue['_id']))
